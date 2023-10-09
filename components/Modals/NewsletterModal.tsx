@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import MailchimpSubscribe, { DefaultFormFields } from 'react-mailchimp-subscribe';
 import styled from 'styled-components';
 import { EnvVars } from 'env';
@@ -10,6 +10,8 @@ import Container from '../Container';
 import Input from '../Input';
 import MailSentState from '../MailSentState';
 import Overlay from '../Overlay';
+import { useMixpanel } from '../../contexts/mixpanel.context';
+import { useAuthContext } from '../../contexts/auth.context';
 
 export interface NewsletterModalProps {
   onClose: () => void;
@@ -17,22 +19,37 @@ export interface NewsletterModalProps {
 
 export default function NewsletterModal({ onClose }: NewsletterModalProps) {
   const [email, setEmail] = useState('');
+  const subscriptionLogged = useRef<boolean>(false);
+
+  const mixpanel = useMixpanel();
 
   useEscClose({ onClose });
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>, enrollNewsletter: (props: DefaultFormFields) => void) {
     event.preventDefault();
-    console.log({ email });
     if (email) {
       enrollNewsletter({ EMAIL: email });
     }
   }
+
+  const handleSubscribeSuccess = (isSuccess: boolean) => {
+    if (isSuccess && !subscriptionLogged.current) {
+      mixpanel.track('newsletter_signup_completed');
+      mixpanel.people.set({
+        'newsletter_subscribed': true,
+      });
+      subscriptionLogged.current = true;
+    }
+  };
 
   return (
     <MailchimpSubscribe
       url={EnvVars.MAILCHIMP_SUBSCRIBE_URL}
       render={({ subscribe, status, message }) => {
         const hasSignedUp = status === 'success';
+
+        handleSubscribeSuccess(hasSignedUp);
+
         return (
           <Overlay>
             <Container>
@@ -48,10 +65,10 @@ export default function NewsletterModal({ onClose }: NewsletterModalProps) {
                       <CustomInput
                         value={email}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                        placeholder="Enter your email..."
+                        placeholder='Enter your email...'
                         required
                       />
-                      <CustomButton as="button" type="submit" disabled={hasSignedUp}>
+                      <CustomButton as='button' type='submit' disabled={hasSignedUp}>
                         Submit
                       </CustomButton>
                     </Row>

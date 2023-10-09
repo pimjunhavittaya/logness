@@ -46,7 +46,8 @@ export default function SignupModal({ onClose }: SignupModalProps) {
         email,
         age,
         gender,
-        subscriptionPlan: SubscriptionPlan.Free
+        subscriptionPlan: SubscriptionPlan.Free,
+        referrerId: '',
       });
     }
   }
@@ -105,6 +106,9 @@ export default function SignupModal({ onClose }: SignupModalProps) {
                 onChange={(e: SelectChangeEvent) => setGender(e.target.value)}
                 placeholder="Gender"
                 label="Gender"
+                MenuProps={{
+                  sx: { zIndex: 1302 },
+                }}
               >
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>

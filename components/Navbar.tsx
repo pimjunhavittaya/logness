@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { ScrollPositionEffectProps, useScrollPosition } from 'hooks/useScrollPosition';
 import { NavItems, SingleNavItem } from 'types';
 import { media } from 'utils/media';
+import { Button as MuiButton, Stack } from '@mui/material';
 import Button from './Button';
 import Container from './Container';
 import Drawer from './Drawer';
@@ -68,7 +69,7 @@ export default function Navbar({ items }: NavbarProps) {
   return (
     <NavbarContainer hidden={isNavbarHidden} transparent={isTransparent}>
       <Content>
-        <NextLink href="/" passHref>
+        <NextLink href='/' passHref>
           <LogoWrapper>
             <Logo />
           </LogoWrapper>
@@ -82,7 +83,7 @@ export default function Navbar({ items }: NavbarProps) {
           <ColorSwitcher />
         </ColorSwitcherContainer>
         <HamburgerMenuWrapper>
-          <HamburgerIcon aria-label="Toggle menu" onClick={toggle} />
+          <HamburgerIcon aria-label='Toggle menu' onClick={toggle} />
         </HamburgerMenuWrapper>
       </Content>
     </NavbarContainer>
@@ -90,6 +91,7 @@ export default function Navbar({ items }: NavbarProps) {
 }
 
 function NavItem({ href, title, login, logout }: SingleNavItem) {
+  const router = useRouter();
   const { setModalOpened } = useModalContext();
   const { isLoggedIn, logout: doLogout } = useAuthContext();
 
@@ -102,7 +104,11 @@ function NavItem({ href, title, login, logout }: SingleNavItem) {
   }
 
   if (logout) {
-    return isLoggedIn ? <CustomButton onClick={doLogout}>{title}</CustomButton> : null;
+    return isLoggedIn ?
+      <Stack direction="row" spacing={1}>
+        <CustomButton onClick={doLogout}>{title}</CustomButton>
+        <MuiButton onClick={() => { void router.push('/dashboard'); }} variant='outlined'>Dashboard</MuiButton>
+      </Stack> : null;
   }
 
   return (

@@ -51,8 +51,8 @@ export const GlobalStyle = createGlobalStyle`
 
   --z-sticky: 100;
   --z-navbar: 1300;
-  --z-drawer: 1000;
-  --z-modal: 1500;
+  --z-drawer: 800;
+  --z-modal: 1301;
 }
 
 /* Box sizing rules */

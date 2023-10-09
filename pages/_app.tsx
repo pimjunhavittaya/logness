@@ -22,6 +22,7 @@ import LoginModal from '../components/Modals/LoginModal';
 import SignupModal from '../components/Modals/SignupModal';
 import { AuthContextProvider } from '../contexts/auth.context';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { MixpanelProvider } from '../contexts/mixpanel.context';
 
 const navItems: NavItems = [
   { title: 'Features', href: '/features' },
@@ -38,7 +39,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
     },
-  }
+  },
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -91,11 +92,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 function Providers<T>({ children }: PropsWithChildren<T>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <ModalContextProvider>
-          <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
-        </ModalContextProvider>
-      </AuthContextProvider>
+      <MixpanelProvider>
+        <AuthContextProvider>
+          <ModalContextProvider>
+            <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
+          </ModalContextProvider>
+        </AuthContextProvider>
+      </MixpanelProvider>
     </QueryClientProvider>
   );
 }

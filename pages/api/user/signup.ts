@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     age,
     gender,
     subscriptionPlan: SubscriptionPlan.Free,
-    isSubscribed: false,
+    newsletterSubscribed: false,
   };
   users.push(newUser);
 
