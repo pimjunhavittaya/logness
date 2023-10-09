@@ -4,11 +4,17 @@ import Button from 'components/Button';
 import ButtonGroup from 'components/ButtonGroup';
 import Container from 'components/Container';
 import SectionTitle from 'components/SectionTitle';
-import { useNewsletterModalContext } from 'contexts/newsletter-modal.context';
 import { media } from 'utils/media';
+import { Modal, useModalContext } from '../contexts/modal.context';
+import { useAuthContext } from '../contexts/auth.context';
 
 export default function WaveCta() {
-  const { setIsModalOpened } = useNewsletterModalContext();
+  const { isLoggedIn } = useAuthContext();
+  const { setModalOpened } = useModalContext();
+
+  if (isLoggedIn) {
+    return null;
+  }
 
   return (
     <>
@@ -23,7 +29,7 @@ export default function WaveCta() {
         <Container>
           <Title>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus delectus?</Title>
           <CustomButtonGroup>
-            <Button onClick={() => setIsModalOpened(true)}>
+            <Button onClick={() => setModalOpened(Modal.Newsletter)}>
               Subscribe to the newsletter <span>&rarr;</span>
             </Button>
             <NextLink href="/features" passHref>

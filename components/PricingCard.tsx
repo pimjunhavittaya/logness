@@ -9,9 +9,11 @@ interface PricingCardProps {
   description: string;
   benefits: string[];
   isOutlined?: boolean;
+  demoRequired?: boolean;
+  onClick?: () => void;
 }
 
-export default function PricingCard({ title, description, benefits, isOutlined, children }: PropsWithChildren<PricingCardProps>) {
+export default function PricingCard({ title, description, benefits, isOutlined, demoRequired, onClick, children }: PropsWithChildren<PricingCardProps>) {
   const isAnyBenefitPresent = benefits?.length;
 
   return (
@@ -30,7 +32,7 @@ export default function PricingCard({ title, description, benefits, isOutlined, 
           </CustomRichText>
         )}
       </PriceContainer>
-      <CustomButton>Get started</CustomButton>
+      <CustomButton onClick={onClick}>{ demoRequired ? 'Request a demo' : 'Get started' }</CustomButton>
     </Wrapper>
   );
 }

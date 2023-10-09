@@ -7,34 +7,47 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ColorModeScript } from 'nextjs-color-mode';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 import { TinaEditProvider } from 'tinacms/dist/edit-state';
 
 import Footer from 'components/Footer';
 import { GlobalStyle } from 'components/GlobalStyles';
 import Navbar from 'components/Navbar';
 import NavigationDrawer from 'components/NavigationDrawer';
-import NewsletterModal from 'components/NewsletterModal';
+import NewsletterModal from 'components/Modals/NewsletterModal';
 import WaveCta from 'components/WaveCta';
-import { NewsletterModalContextProvider, useNewsletterModalContext } from 'contexts/newsletter-modal.context';
 import { NavItems } from 'types';
+import { Modal, ModalContextProvider, useModalContext } from '../contexts/modal.context';
+import LoginModal from '../components/Modals/LoginModal';
+import SignupModal from '../components/Modals/SignupModal';
+import { AuthContextProvider } from '../contexts/auth.context';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const navItems: NavItems = [
-  { title: 'Awesome SaaS Features', href: '/features' },
+  { title: 'Features', href: '/features' },
   { title: 'Pricing', href: '/pricing' },
-  { title: 'Contact', href: '/contact' },
-  { title: 'Sign up', href: '/sign-up', outlined: true },
+  { title: 'Request a Demo', href: '/request-demo' },
+  { title: 'Log in', href: '/log-in', login: true },
+  { title: 'Log out', href: '/log-out', logout: true },
 ];
 
 const TinaCMS = dynamic(() => import('tinacms'), { ssr: false });
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  }
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='' />
+        <link rel='icon' type='image/png' href='/favicon.png' />
         {/* <link rel="alternate" type="application/rss+xml" href={EnvVars.URL + 'rss'} title="RSS 2.0" /> */}
         {/* <script
           dangerouslySetInnerHTML={{
@@ -77,18 +90,33 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 function Providers<T>({ children }: PropsWithChildren<T>) {
   return (
-    <NewsletterModalContextProvider>
-      <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
-    </NewsletterModalContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <ModalContextProvider>
+          <NavigationDrawer items={navItems}>{children}</NavigationDrawer>
+        </ModalContextProvider>
+      </AuthContextProvider>
+    </QueryClientProvider>
   );
 }
 
 function Modals() {
-  const { isModalOpened, setIsModalOpened } = useNewsletterModalContext();
-  if (!isModalOpened) {
-    return null;
+  const { modalOpened, setModalOpened } = useModalContext();
+
+  const closeModal = useCallback(() => {
+    setModalOpened(null);
+  }, []);
+
+  switch (modalOpened) {
+    case Modal.Login:
+      return <LoginModal onClose={closeModal} />;
+    case Modal.SignUp:
+      return <SignupModal onClose={closeModal} />;
+    case Modal.Newsletter:
+      return <NewsletterModal onClose={closeModal} />;
   }
-  return <NewsletterModal onClose={() => setIsModalOpened(false)} />;
+
+  return null;
 }
 
 export default MyApp;

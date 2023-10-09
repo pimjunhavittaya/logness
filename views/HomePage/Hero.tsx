@@ -5,23 +5,23 @@ import ButtonGroup from 'components/ButtonGroup';
 import Container from 'components/Container';
 import HeroIllustration from 'components/HeroIllustation';
 import OverTitle from 'components/OverTitle';
-import { useNewsletterModalContext } from 'contexts/newsletter-modal.context';
 import { media } from 'utils/media';
+import { Modal, useModalContext } from '../../contexts/modal.context';
 
 export default function Hero() {
-  const { setIsModalOpened } = useNewsletterModalContext();
+  const { setModalOpened } = useModalContext();
 
   return (
     <HeroWrapper>
       <Contents>
-        <CustomOverTitle>the coolest, saas product you have ever seen</CustomOverTitle>
-        <Heading>Make your life easier with our SaaS</Heading>
+        <CustomOverTitle>All-in-one Note-taking Platform</CustomOverTitle>
+        <Heading>Organize your life with Logness</Heading>
         <Description>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, tempora qui. Explicabo voluptate iure ipsum molestias
           repudiandae perspiciatis nostrum praesentium, unde pariatur tempora magni rem. Necessitatibus facilis obcaecati ratione.
         </Description>
         <CustomButtonGroup>
-          <Button onClick={() => setIsModalOpened(true)}>
+          <Button onClick={() => setModalOpened(Modal.Newsletter)}>
             Subscribe to the newsletter <span>&rarr;</span>
           </Button>
           <NextLink href="#whitepaper" passHref>

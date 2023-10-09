@@ -3,6 +3,7 @@ import { FacebookIcon, LinkedinIcon, TwitterIcon } from 'react-share';
 import styled from 'styled-components';
 import Container from 'components/Container';
 import { media } from 'utils/media';
+import { useAuthContext } from '../contexts/auth.context';
 
 type SingleFooterListItem = { title: string; href: string };
 type FooterListItems = SingleFooterListItem[];
@@ -47,6 +48,12 @@ const footerItems: FooterItems = [
 ];
 
 export default function Footer() {
+  const { isLoggedIn } = useAuthContext();
+
+  if (isLoggedIn) {
+    return null;
+  }
+
   return (
     <FooterWrapper>
       <Container>

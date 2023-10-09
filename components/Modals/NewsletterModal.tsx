@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { EnvVars } from 'env';
 import useEscClose from 'hooks/useEscKey';
 import { media } from 'utils/media';
-import Button from './Button';
-import CloseIcon from './CloseIcon';
-import Container from './Container';
-import Input from './Input';
-import MailSentState from './MailSentState';
-import Overlay from './Overlay';
+import Button from '../Button';
+import CloseIcon from '../CloseIcon';
+import Container from '../Container';
+import Input from '../Input';
+import MailSentState from '../MailSentState';
+import Overlay from '../Overlay';
 
 export interface NewsletterModalProps {
   onClose: () => void;

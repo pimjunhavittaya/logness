@@ -49,10 +49,10 @@ export const GlobalStyle = createGlobalStyle`
   --shadow-md: 0 2px 4px 0 rgb(12 0 46 / 4%);
   --shadow-lg: 0 10px 14px 0 rgb(12 0 46 / 6%);
 
-  --z-sticky: 7777;
-  --z-navbar: 8888;
-  --z-drawer: 9999;
-  --z-modal: 9999;
+  --z-sticky: 100;
+  --z-navbar: 1300;
+  --z-drawer: 1000;
+  --z-modal: 1500;
 }
 
 /* Box sizing rules */

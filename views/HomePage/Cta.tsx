@@ -7,8 +7,13 @@ import Container from 'components/Container';
 import OverTitle from 'components/OverTitle';
 import SectionTitle from 'components/SectionTitle';
 import { media } from 'utils/media';
+import { Modal, useModalContext } from '../../contexts/modal.context';
+import { useRouter } from 'next/router';
 
 export default function Cta() {
+  const { setModalOpened } = useModalContext();
+  const router = useRouter();
+
   return (
     <CtaWrapper>
       <Container>
@@ -20,16 +25,12 @@ export default function Cta() {
             culpa.
           </Description>
           <ButtonGroup>
-            <NextLink href="#early-access" passHref>
-              <Button>
-                Subscribe to the newsletter <span>&rarr;</span>
-              </Button>
-            </NextLink>
-            <NextLink href="#whitepaper" passHref>
-              <OutlinedButton transparent>
-                Features <span>&rarr;</span>
-              </OutlinedButton>
-            </NextLink>
+            <Button onClick={() => setModalOpened(Modal.Newsletter)}>
+              Subscribe to the newsletter <span>&rarr;</span>
+            </Button>
+            <OutlinedButton onClick={() => router.push('/features')} transparent>
+              Features <span>&rarr;</span>
+            </OutlinedButton>
           </ButtonGroup>
         </Stack>
       </Container>
