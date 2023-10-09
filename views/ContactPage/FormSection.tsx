@@ -5,6 +5,7 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import { media } from 'utils/media';
 import MailSentState from '../../components/MailSentState';
+import { useMixpanel } from '../../contexts/mixpanel.context';
 
 interface EmailPayload {
   name: string;
@@ -17,6 +18,8 @@ export default function FormSection() {
   const [hasErrored, setHasErrored] = useState(false);
   const { register, handleSubmit, formState } = useForm();
   const { isSubmitSuccessful, isSubmitting, isSubmitted, errors } = formState;
+
+  const mixpanel = useMixpanel();
 
   async function onSubmit(payload: EmailPayload) {
     try {
@@ -37,6 +40,10 @@ export default function FormSection() {
     }
 
     setHasSuccessfullySentMail(true);
+
+    mixpanel.track('support_enquired', {
+      'contact_details': payload.description,
+    });
   }
 
   const isSent = isSubmitSuccessful && isSubmitted;
@@ -54,24 +61,25 @@ export default function FormSection() {
         <InputGroup>
           <InputStack>
             {errors.name && <ErrorMessage>Name is required</ErrorMessage>}
-            <Input placeholder="Your Name" id="name" disabled={isDisabled} {...register('name', { required: true })} />
+            <Input placeholder='Your Name' id='name' disabled={isDisabled} {...register('name', { required: true })} />
           </InputStack>
           <InputStack>
             {errors.email && <ErrorMessage>Email is required</ErrorMessage>}
-            <Input placeholder="Your Email" id="email" disabled={isDisabled} {...register('email', { required: true })} />
+            <Input placeholder='Your Email' id='email'
+                   disabled={isDisabled} {...register('email', { required: true })} />
           </InputStack>
         </InputGroup>
         <InputStack>
           {errors.description && <ErrorMessage>Description is required</ErrorMessage>}
           <Textarea
-            as="textarea"
-            placeholder="Enter Your Message..."
-            id="description"
+            as='textarea'
+            placeholder='Enter Your Message...'
+            id='description'
             disabled={isDisabled}
             {...register('description', { required: true })}
           />
         </InputStack>
-        <Button as="button" type="submit" disabled={isSubmitDisabled}>
+        <Button as='button' type='submit' disabled={isSubmitDisabled}>
           Send Message
         </Button>
       </Form>
@@ -103,6 +111,7 @@ const InputGroup = styled.div`
 
   ${media('<=tablet')} {
     flex-direction: column;
+
     & > *:first-child {
       margin-right: 0rem;
       margin-bottom: 2rem;
