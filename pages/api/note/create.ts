@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     owner,
     content,
     createdAt: (new Date()).getTime(),
+
   };
 
   notes.push(newNote);

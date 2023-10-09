@@ -39,6 +39,8 @@ export const useSignup = (options?: UseMutationOptions<User, unknown, signupPara
       });
 
       mixpanel.people.set({
+        '$name': user.email,
+        '$email': user.email,
         'age': user.age,
         'gender': user.gender.toLowerCase(),
         'subscription_plan': user.subscriptionPlan.toLowerCase(),

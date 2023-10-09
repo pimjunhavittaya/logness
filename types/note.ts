@@ -4,6 +4,7 @@ export type Note = {
   owner: string;
   workspace: string;
   createdAt: number;
+  editedAt?: number;
   content: Array<Element>;
 }
 

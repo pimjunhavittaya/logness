@@ -4,13 +4,21 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useCreateNote } from '../../hooks/api/useCreateNote';
 import { Elements } from '../../types/note';
+import { useMixpanel } from '../../contexts/mixpanel.context';
 
 export default function NoteCreatePage() {
   const router = useRouter();
   const workspace = router.query.workspace as string;
 
+  const mixpanel = useMixpanel();
+
   const { mutate: createNote, isLoading } = useCreateNote({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      mixpanel.track('note_created', {
+        'workspace_type': 'private',
+        'note_elements': data.content,
+      })
+
       void router.push(`/workspace/${workspace}`);
     },
   });
@@ -18,7 +26,8 @@ export default function NoteCreatePage() {
   const [title, setTitle] = useState<string>('');
   const [elements, setElements] = useState<Array<string>>([]);
 
-  const handleCreateNote = () => {
+  const handleCreateNote = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     void createNote({
       name: title,
       workspace: workspace,

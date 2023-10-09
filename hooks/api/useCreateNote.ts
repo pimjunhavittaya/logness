@@ -25,6 +25,7 @@ export const useCreateNote = (options?: UseMutationOptions<Note, unknown, Create
         },
         body: JSON.stringify({ owner: user.id, name, workspace, content }),
       });
+      console.log('response: ', response);
       const jsonRes = await response.json();
 
       if (!response.ok) {

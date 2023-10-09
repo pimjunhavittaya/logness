@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const data = notes.find((note) => {
     return id ? note.id === id : true;
-  })
+  });
 
   if (!data) {
     return res.status(400);
@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   data.name = name;
   data.content = content;
+  data.editedAt = (new Date()).getTime();
 
   const updatedData = JSON.stringify(notes);
   await fs.writeFile(noteDirectory, updatedData);

@@ -4,14 +4,24 @@ import { Button, Stack, TextField } from '@mui/material';
 import { useGetWorkspaces } from '../../hooks/api/useGetWorkspaces';
 import WorkspaceMenu from './WorkspaceMenu';
 import { useCreateWorkspace } from '../../hooks/api/useCreateWorkspace';
+import { useMixpanel } from '../../contexts/mixpanel.context';
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
-  const { mutate: getWorkspaces, data: workspaces, isSuccess } = useGetWorkspaces();
-  const { mutate: createWorkspace, isLoading, isSuccess: isCreatedSuccess } = useCreateWorkspace();
-
   const [workspaceName, setWorkspaceName] = useState<string>('');
+
+  const mixpanel = useMixpanel();
+
+  const { mutate: getWorkspaces, data: workspaces, isSuccess } = useGetWorkspaces();
+  const { mutate: createWorkspace, isLoading, isSuccess: isCreatedSuccess } = useCreateWorkspace({
+    onSuccess: () => {
+      setWorkspaceName('');
+      mixpanel.track('workspace_created', {
+        'workspace_type': 'private'
+      })
+    }
+  });
 
   const handleAddWorkspace = () => {
     if (workspaceName) {

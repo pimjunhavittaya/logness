@@ -5,8 +5,12 @@ import { useEffect } from 'react';
 import { useGetWorkspaces } from '../../hooks/api/useGetWorkspaces';
 import NoteList from '../../views/WorkspacePage/noteList';
 import { useArchiveWorkspace } from '../../hooks/api/useArchiveWorkspace';
+import { useMixpanel } from '../../contexts/mixpanel.context';
+import { daysPassedSinceTimestamp } from '../../utils/daysPassedSinceTimestamp';
 
 export default function WorkspacePage() {
+  const mixpanel = useMixpanel();
+
   const router = useRouter();
   const workspaceId = router.query.id as string;
 
@@ -14,6 +18,13 @@ export default function WorkspacePage() {
 
   const { mutate: archive, isLoading: isArchiving } = useArchiveWorkspace({
     onSuccess: () => {
+      const workspace = workspaces?.[0];
+      if (workspace) {
+        mixpanel.track('workspace_archived', {
+          'workspace_lifetime_days': daysPassedSinceTimestamp(workspace?.createdAt),
+        });
+      }
+
       void router.push('/dashboard');
     },
   });
@@ -55,7 +66,7 @@ export default function WorkspacePage() {
             }} variant='contained'>add new note</Button>
           </Box>
           <Box>
-            <Button onClick={handleArchive} variant="contained" color='error'>
+            <Button onClick={handleArchive} variant='contained' color='error'>
               archive workspace
             </Button>
           </Box>
