@@ -6,8 +6,14 @@ import { User } from '../../../types/user';
 const userDirectory = '/tmp/users.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const jsonData = await fs.readFile(userDirectory, 'utf8');
-  const users: Array<User> = JSON.parse(jsonData) ?? [];
+  let users: Array<User> = [];
+
+  try {
+    const jsonData = await fs.readFile(userDirectory, 'utf8');
+    users = JSON.parse(jsonData) ?? [];
+  } catch (e) {
+    console.log('[changePlan] file not found');
+  }
 
   const { id, newPlan } = req.body;
   const data = users.find((user) => user.id === id);

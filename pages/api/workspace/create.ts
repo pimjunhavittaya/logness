@@ -2,12 +2,19 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
+import { Workspace } from '../../../types/workspace';
 
 const workspaceDirectory = '/tmp/workspaces.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const jsonData = await fs.readFile(workspaceDirectory, 'utf8');
-  const workspaces = JSON.parse(jsonData) ?? [];
+  let workspaces: Array<Workspace> = [];
+
+  try {
+    const jsonData = await fs.readFile(workspaceDirectory, 'utf8');
+    workspaces = JSON.parse(jsonData) ?? [];
+  } catch (e) {
+    console.log('[workspace create] file not found');
+  }
 
   const { name, owner } = req.body;
   const newWorkspace = {

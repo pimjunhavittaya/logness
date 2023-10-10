@@ -3,7 +3,7 @@ export type Workspace = {
   name: string;
   owner: string;
   createdAt: number;
-  editedAt: number;
+  editedAt?: number;
   notes?: Array<{
     id: string;
     name: string;
