@@ -7,7 +7,7 @@ export interface MixpanelProviderProps extends Omit<ProviderProps<MixpanelContex
   config?: Partial<Config>;
 }
 
-const token = 'af14d926766c8262a4a678e5d36e9b06';
+const token = '8802bac4510d15c6fc3a09373510adf7';
 
 export const MixpanelContext = React.createContext<MixpanelContextValue>(undefined);
 
