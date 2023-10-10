@@ -1,4 +1,3 @@
-import path from 'path';
 import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Workspace } from '../../../types/workspace';
@@ -17,8 +16,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('[workspace get] file not found');
   }
 
-  const noteJsonData = await fs.readFile(noteDirectory, 'utf8');
-  const notes: Array<Note> = JSON.parse(noteJsonData)
+  let notes: Array<Note> = [];
+  try {
+    const jsonData = await fs.readFile(noteDirectory, 'utf8');
+    notes = JSON.parse(jsonData) ?? [];
+  } catch (e) {
+    console.log('[workspace get] note file not found');
+  }
 
   const { id, owner } = req.body;
 

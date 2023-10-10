@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { promises as fs } from 'fs';
 import { Workspace } from '../../../types/workspace';
-import path from 'path';
-import { Note } from '../../../types/note';
 
 const workspaceDirectory = '/tmp/workspaces.json';
 
