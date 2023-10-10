@@ -7,7 +7,7 @@ const noteDirectory = '/tmp/notes.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(noteDirectory, 'utf8');
-  const notes: Array<Note> = JSON.parse(jsonData);
+  const notes: Array<Note> = JSON.parse(jsonData) ?? [];
 
   const { id } = req.query;
 

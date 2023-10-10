@@ -7,7 +7,7 @@ const userDirectory = '/tmp/users.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(userDirectory, 'utf8');
-  const users: Array<User> = JSON.parse(jsonData);
+  const users: Array<User> = JSON.parse(jsonData) ?? [];
 
   const { email } = req.body;
   const data = users.find((user) => user.email === email);

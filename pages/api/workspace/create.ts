@@ -7,7 +7,7 @@ const workspaceDirectory = '/tmp/workspaces.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(workspaceDirectory, 'utf8');
-  const workspaces = JSON.parse(jsonData);
+  const workspaces = JSON.parse(jsonData) ?? [];
 
   const { name, owner } = req.body;
   const newWorkspace = {
