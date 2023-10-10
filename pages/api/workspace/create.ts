@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 
-const workspaceDirectory = path.join(process.cwd(), 'json/workspaces.json');
+const workspaceDirectory = '/tmp/workspaces.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(workspaceDirectory, 'utf8');

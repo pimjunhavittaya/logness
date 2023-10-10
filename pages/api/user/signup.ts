@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import { SubscriptionPlan, User } from '../../../types/user';
 
-const userDirectory = path.join(process.cwd(), 'json/users.json');
+const userDirectory = '/tmp/users.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(userDirectory, 'utf8');

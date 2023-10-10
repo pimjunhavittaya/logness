@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '../../../types/user';
 
-const userDirectory = path.join(process.cwd(), 'json/users.json');
+const userDirectory = '/tmp/users.json';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const jsonData = await fs.readFile(userDirectory, 'utf8');
